@@ -1,0 +1,5 @@
+{
+    "title": "The Future of Serverless Architecture",
+    "date": "Oct 12, 2023",
+    "content": "<p>Serverless architecture is revolutionizing the way we build and deploy applications. By abstracting away the infrastructure management, developers can focus purely on business logic.</p><h3>Why use Serverless?</h3><ul><li>Cost Efficiency</li><li>Scalability</li><li>Reduced Ops Overhead</li></ul><p>In this post, we explore how AWS Lambda and Vercel are leading the charge...</p>"
+}
