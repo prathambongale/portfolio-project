@@ -7,6 +7,7 @@ function initApp() {
     renderSections();
     loadFooter();
     initTheme();
+    initMobileNav();
 }
 
 /**
@@ -45,6 +46,75 @@ function initTheme() {
         icon.classList.remove('fa-sun');
         icon.classList.add('fa-moon');
         localStorage.setItem('theme', 'dark');
+    }
+}
+
+/**
+ * Initialize Mobile Navigation
+ */
+function initMobileNav() {
+    const burger = document.querySelector('.hamburger');
+    const nav = document.querySelector('.nav-links');
+
+    // Using delegation since links are added dynamically
+    const navLinks = () => document.querySelectorAll('.nav-links li');
+
+    if (!burger) return;
+
+    burger.addEventListener('click', () => {
+        // Toggle Nav
+        nav.classList.toggle('active');
+
+        // Toggle Icon
+        const icon = burger.querySelector('i');
+        if (nav.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+
+        // Animate Links
+        navLinks().forEach((link, index) => {
+            if (link.style.animation) {
+                link.style.animation = '';
+            } else {
+                link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
+            }
+        });
+    });
+
+    // Close menu when clicking outside or on a link
+    document.addEventListener('click', (e) => {
+        if (nav.classList.contains('active') && !nav.contains(e.target) && !burger.contains(e.target)) {
+            closeMenu();
+        }
+    });
+
+    // Delegate click for links
+    nav.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') {
+            closeMenu();
+        }
+    });
+
+    // Close menu on resize to desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && nav.classList.contains('active')) {
+            closeMenu();
+        }
+    });
+
+    function closeMenu() {
+        nav.classList.remove('active');
+        const icon = burger.querySelector('i');
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+
+        navLinks().forEach(link => {
+            link.style.animation = '';
+        });
     }
 }
 
