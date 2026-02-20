@@ -86,7 +86,7 @@ function loadProfile() {
     const p = siteConfig.profile;
 
     // Text Content
-    document.title = `${p.name} | ${p.title}`;
+    document.title = p.name;
     document.getElementById('hero-name').textContent = p.name;
     document.getElementById('hero-title').textContent = p.title;
     document.getElementById('hero-tagline').textContent = p.tagline;
