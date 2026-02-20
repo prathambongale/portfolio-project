@@ -6,47 +6,8 @@ function initApp() {
     loadProfile();
     renderSections();
     loadFooter();
-    initTheme();
+    // initTheme(); // Theme toggle removed for premium dark theme
     initMobileNav();
-}
-
-/**
- * Initialize Theme Toggle
- */
-function initTheme() {
-    const toggleBtn = document.getElementById('theme-toggle');
-    const icon = toggleBtn.querySelector('i');
-    const root = document.documentElement;
-
-    // Check for saved preference
-    const savedTheme = localStorage.getItem('theme');
-
-    // Apply saved theme
-    if (savedTheme === 'light') {
-        enableLightMode();
-    }
-
-    toggleBtn.addEventListener('click', () => {
-        if (root.classList.contains('light-mode')) {
-            disableLightMode();
-        } else {
-            enableLightMode();
-        }
-    });
-
-    function enableLightMode() {
-        root.classList.add('light-mode');
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-        localStorage.setItem('theme', 'light');
-    }
-
-    function disableLightMode() {
-        root.classList.remove('light-mode');
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
-        localStorage.setItem('theme', 'dark');
-    }
 }
 
 /**
@@ -130,11 +91,15 @@ function loadProfile() {
     document.getElementById('hero-title').textContent = p.title;
     document.getElementById('hero-tagline').textContent = p.tagline;
     document.getElementById('hero-image').src = p.avatar;
-    document.getElementById('nav-logo').textContent = getInitials(p.name) + ".";
+    document.getElementById('nav-logo').innerHTML = `${getInitials(p.name)}<span>.</span>`;
 
     // Contact
     const emailBtn = document.getElementById('contact-email-btn');
     if (emailBtn) emailBtn.href = `mailto:${p.email}`;
+
+    // Calendly
+    const calendlyBtn = document.getElementById('contact-calendly-btn');
+    if (calendlyBtn) calendlyBtn.href = p.calendly;
 }
 
 /**
@@ -170,8 +135,6 @@ function renderSections() {
             item.render(main);
         }
     });
-
-    // Mobile nav toggle logic could go here
 }
 
 // =========================================
@@ -196,7 +159,7 @@ function renderServices(container) {
         const div = document.createElement('div');
         div.className = 'service-card';
         div.innerHTML = `
-            <i class="${svc.icon} service-icon"></i>
+            <div class="service-icon"><i class="${svc.icon}"></i></div>
             <h3>${svc.title}</h3>
             <p>${svc.description}</p>
         `;
@@ -208,6 +171,8 @@ function renderServices(container) {
 function renderExperience(container) {
     const fragment = getTemplate('tpl-experience');
     const timeline = fragment.querySelector('#experience-timeline');
+
+    if (!timeline) return;
 
     siteConfig.experience.forEach(exp => {
         const div = document.createElement('div');
@@ -227,6 +192,8 @@ function renderEducation(container) {
     const fragment = getTemplate('tpl-education');
     const timeline = fragment.querySelector('#education-timeline');
 
+    if (!timeline) return;
+
     siteConfig.education.forEach(edu => {
         const div = document.createElement('div');
         div.className = 'timeline-item';
@@ -244,6 +211,8 @@ function renderSkills(container) {
     const fragment = getTemplate('tpl-skills');
     const list = fragment.querySelector('#skills-list');
 
+    if (!list) return;
+
     siteConfig.skills.forEach(skill => {
         const span = document.createElement('span');
         span.className = 'skill-tag';
@@ -256,6 +225,8 @@ function renderSkills(container) {
 function renderInterests(container) {
     const fragment = getTemplate('tpl-interests');
     const list = fragment.querySelector('#interests-list');
+
+    if (!list) return;
 
     siteConfig.interests.forEach(interest => {
         const span = document.createElement('span');
@@ -270,6 +241,8 @@ function renderAwards(container) {
     const fragment = getTemplate('tpl-awards');
     const list = fragment.querySelector('#awards-list');
 
+    if (!list) return;
+
     siteConfig.awards.forEach(item => {
         const li = document.createElement('li');
         li.className = 'award-item';
@@ -282,6 +255,8 @@ function renderAwards(container) {
 function renderCertifications(container) {
     const fragment = getTemplate('tpl-certifications');
     const list = fragment.querySelector('#certifications-list');
+
+    if (!list) return;
 
     siteConfig.certifications.forEach(item => {
         const li = document.createElement('li');
@@ -297,6 +272,8 @@ function renderBlog(container) {
     const grid = fragment.querySelector('#blog-grid');
     const modal = fragment.querySelector('#blog-modal');
     const closeBtn = fragment.querySelector('.close-modal');
+
+    if (!grid) return;
 
     // Close logic
     closeBtn.onclick = () => { modal.style.display = 'none'; };
@@ -328,9 +305,18 @@ function renderContact(container) {
     const socialContainer = fragment.querySelector('#contact-socials');
     const socials = siteConfig.profile.social;
 
-    if (socials.linkedin) socialContainer.innerHTML += `<a href="${socials.linkedin}" target="_blank" class="social-icon"><i class="fab fa-linkedin"></i></a>`;
-    if (socials.github) socialContainer.innerHTML += `<a href="${socials.github}" target="_blank" class="social-icon"><i class="fab fa-github"></i></a>`;
-    if (socials.twitter) socialContainer.innerHTML += `<a href="${socials.twitter}" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>`;
+    if (socialContainer) {
+        if (socials.linkedin) socialContainer.innerHTML += `<a href="${socials.linkedin}" target="_blank" class="social-icon"><i class="fab fa-linkedin-in"></i></a>`;
+        if (socials.github) socialContainer.innerHTML += `<a href="${socials.github}" target="_blank" class="social-icon"><i class="fab fa-github"></i></a>`;
+        if (socials.twitter) socialContainer.innerHTML += `<a href="${socials.twitter}" target="_blank" class="social-icon"><i class="fab fa-twitter"></i></a>`;
+    }
+
+    // Set links for static buttons in template
+    const emailBtn = fragment.querySelector('#contact-email-btn');
+    if (emailBtn) emailBtn.href = `mailto:${siteConfig.profile.email}`;
+
+    const calendlyBtn = fragment.querySelector('#contact-calendly-btn');
+    if (calendlyBtn) calendlyBtn.href = siteConfig.profile.calendly;
 
     container.appendChild(fragment);
 }
@@ -378,3 +364,4 @@ async function openBlog(e, id) {
         body.innerHTML = `<p>Error loading full content. Please check the file path: ${blog.file}</p><p>Summary: ${blog.summary}</p>`;
     }
 }
+
