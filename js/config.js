@@ -12,7 +12,7 @@ const siteConfig = {
         awards: false,
         certifications: false,
         services: true,
-        blog: true,
+        blog: false,
         contact: true
     },
 
