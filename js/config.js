@@ -66,9 +66,9 @@ const siteConfig = {
             description: "Part-time strategic technology leadership for your company. 10–15 hours per month of architecture decisions, vendor selection, team hiring guidance, and strategic planning — without the R80k–R120k/month cost of a full-time CTO."
         },
         {
-            title: "POPIA Compliance Engineering",
-            icon: "fas fa-shield-halved",
-            description: "Turn POPIA compliance from a legal checklist into working code. We implement data masking, access policies (Open Policy Agent), audit trails, and data lineage tracking in your existing systems. Deliverable: production-ready code + documentation."
+            title: "Architecture Review & Technology Roadmap",
+            icon: "fas fa-map-location-dot",
+            description: "A comprehensive audit of your current technology stack to identify performance bottlenecks, security risks, and technical debt. We provide a 12-month strategic roadmap that aligns your architecture with your business growth goals."
         }
     ],
 
